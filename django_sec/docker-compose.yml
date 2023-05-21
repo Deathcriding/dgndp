@@ -1,0 +1,23 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+      - 8000:8000
+    command: gunicorn --bind 0.0.0.0:8000 django_sec.wsgi:application
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:15.3-alpine
+    environment:
+      - POSTGRES_USER=admin_postgres
+      - POSTGRES_PASSWORD=password_postgres
+      - POSTGRES_DB=db_postgres
+    volumes:
+      - psqlvolume:/var/lib/postgresql/data/
+
+volumes:
+  psqlvolume:
+
